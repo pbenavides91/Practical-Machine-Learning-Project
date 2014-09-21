@@ -1,0 +1,55 @@
+---
+title: "Machine Learning Project"
+author: "Shahab"
+date: "September 21, 2014"
+output: html_document
+---
+
+The data was download on my Mac and then I used them
+
+```{r}
+Train_Data <- read.csv("./data/pml-training.csv")
+dim(Train_Data)
+```
+
+The data seems hasa large number of columns in the dataset, Lets check if there are missing data in it
+```{r}
+na <- apply(Train_Data, 2, function(x) sum(x %in% c(NA, "")))
+na
+```
+
+
+Seems there lots of NAs, so we skip these variables and analyze only complete ones.
+
+```{r}
+index <- which(na == 0)
+Train_Data <- Train_Data[,index]
+Train_Data <- Train_Data[,8:60]
+```
+
+Lets see the Matrix Model
+
+```{r}
+library(randomForest)
+library(caret)
+model <- randomForest(classe~., data = Train_Data)
+pred <- predict(model, Train_Data)
+confusionMatrix(Train_Data$classe, pred)
+```
+
+We should check the model on different dataset. 
+```{r}
+Test_Data <- read.csv("./data/pml-testing.csv")
+Test_Data <- Test_Data[,index]
+Test_Data <- Test_Data[,8:59]
+Test_Data$classe <- factor(nrow(Test_Data))
+levels(Test_Data$classe) <- levels(Train_Data$classe)
+Test2 <- rbind(Train_Data[1,], Test_Data) 
+Test2 <- Test2[2:21,]
+```
+
+Lets see the Model
+```{r}
+TestModel <- predict(model, Test2)
+TestModel
+```
