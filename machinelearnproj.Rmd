@@ -1,11 +1,9 @@
 ---
 title: "Machine Learning Project"
-author: "Shahab"
-date: "September 21, 2014"
+author: "Pablo Benavides López"
+date: "October 22, 2017"
 output: html_document
 ---
-
-The data was download on my Mac and then I used them
 
 ```{r}
 Train_Data <- read.csv("./data/pml-training.csv")
